@@ -1,43 +1,59 @@
+import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { Tabs } from 'expo-router';
-import React from 'react';
-import { Platform } from 'react-native';
+import Header from '../header';
+import { useRoute, RouteProp } from '@react-navigation/native';
 
-import { HapticTab } from '@/components/HapticTab';
-import { IconSymbol } from '@/components/ui/IconSymbol';
-import TabBarBackground from '@/components/ui/TabBarBackground';
-import { Colors } from '@/constants/Colors';
-import { useColorScheme } from '@/hooks/useColorScheme';
-
+type TabLayoutRouteParams = {
+  firstName: string;
+  lastName: string;
+  email:string;
+  phoneNumber:string;
+};
+type TabLayoutRouteProp = RouteProp<{ params: TabLayoutRouteParams }, 'params'>;
 export default function TabLayout() {
-  const colorScheme = useColorScheme();
-
+  const route = useRoute<TabLayoutRouteProp>();
+  const { firstName, lastName, email, phoneNumber } = route.params || {};
   return (
+    
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
-        headerShown: false,
-        tabBarButton: HapticTab,
-        tabBarBackground: TabBarBackground,
-        tabBarStyle: Platform.select({
-          ios: {
-            // Use a transparent background on iOS to show the blur effect
-            position: 'absolute',
-          },
-          default: {},
-        }),
-      }}>
+        tabBarActiveTintColor: '#FD6A00',
+        header: () => <Header firstName={firstName} lastName={lastName} />, // Ajout du Header en haut de chaque écran
+      }}
+    >
       <Tabs.Screen
-        name="index"
+        name="accueil"
         options={{
           title: 'Home',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="house.fill" color={color} />,
+          tabBarIcon: ({ color }) => <FontAwesome size={28} name="home" color={color} />,
         }}
       />
       <Tabs.Screen
-        name="explore"
+        name="reservation"
         options={{
-          title: 'Explore',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="paperplane.fill" color={color} />,
+          title: 'Réservations',
+          tabBarIcon: ({ color }) => <FontAwesome size={28} name="shopping-cart" color={color} />,
+        }}
+      />
+      <Tabs.Screen
+        name="parking"
+        options={{
+          title: 'Parking',
+          tabBarIcon: ({ color }) => <FontAwesome size={28} name="car" color={color} />,
+        }}
+      />
+      <Tabs.Screen
+        name="messages"
+        options={{
+          title: 'Messages',
+          tabBarIcon: ({ color }) => <FontAwesome size={28} name="envelope" color={color} />,
+        }}
+      />
+      <Tabs.Screen
+        name="profile"
+        options={{
+          title: 'Profil',
+          tabBarIcon: ({ color }) => <FontAwesome size={28} name="user" color={color} />,
         }}
       />
     </Tabs>
